@@ -51,11 +51,11 @@ This is specifically for frontend development. It will start Vite, allowing you 
 ### TypeScript
 This project is built using TypeScript for both the backend and frontend. Make sure you're comfortable with TypeScript conventions.
 
-#### Backend TypeScript Configuration
+*Backend TypeScript Configuration*
 
 The tsconfig.json in the backend directory configures TypeScript for Node.js and Express. Ensure that you're exporting your types and interfaces properly.
 
-#### Frontend TypeScript Configuration
+*Frontend TypeScript Configuration*
 
 The svelte.config.js and tsconfig.json in the frontend-web directory set up TypeScript for SvelteKit.
 
