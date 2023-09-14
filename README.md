@@ -16,7 +16,7 @@ Frontend: SvelteKit with TypeScript
 ### Installation
 1. Clone this repository
 ```bash
-git clone https://github.com/Kade-Angell/your-project-name.git
+git clone https://github.com/ArKade523/CS2610Project.git
 ```
 2. Install backend dependencies
 ```bash
