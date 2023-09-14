@@ -6,8 +6,8 @@ Welcome to my yet-to-be-named social media art project! This platform prompts us
 
 ## 🛠 Technologies
 
-Backend: Express with TypeScript
-Frontend: SvelteKit with TypeScript
+- Backend: Express with TypeScript
+- Frontend: SvelteKit with TypeScript
 ## 🚀 Getting Started
 
 ### Prerequisites
