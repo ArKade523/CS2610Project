@@ -10,6 +10,10 @@ app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.resolve('../frontend-web/build/index.html'))  
 });
 
+app.get('/health-check', (req: Request, res: Response) => {
+    res.send('OK');
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
