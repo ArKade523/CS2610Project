@@ -23,7 +23,7 @@ jobs:
       run: |
         cd frontend-web
         npm install
-        npm run build  # Replace this with your actual build script if different
+        npm run build
 
   run_backend:
     runs-on: ubuntu-latest
