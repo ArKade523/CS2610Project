@@ -27,6 +27,8 @@
 		height: 4rem;
 		z-index: 2;
 		font-family: var(--font-mono);
+
+        background-color: var(--secondary);
 	}
 
 	.desktop-nav {
@@ -45,7 +47,7 @@
 	}
 	
 	nav > a:hover {
-		color: var(--accent);
+		color: var(--secondary);
 		text-decoration: none;
 		cursor: pointer;
 	}
