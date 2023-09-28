@@ -5,28 +5,26 @@
     // TODO: Create Forgot Password page
     // TODO: Create Register page
 
+    let email = '';
     let username = '';
     let password = '';
-
-    let usernameEmpty = false;
-    let passwordEmpty = false;
+    let confirmPassword = '';
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
 
-        usernameEmpty = !username;
-        passwordEmpty = !password;
-
-        if (usernameEmpty || passwordEmpty) {
+        if (password !== confirmPassword) {
+            console.log("Passwords don't match");
             return;
         }
 
         const payload = {
+            email,
             username,
             password
         };
 
-        const response = await fetch('/api/login', {
+        const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -36,36 +34,28 @@
 
         if (response.ok) {
             // TODO: Redirect to homepage
-            console.log('Login successful');
+            console.log('Registration successful');
         } else {
             // TODO: display an error message
-            console.log('Login unsuccessful');
+            console.log('Registration failed');
         }
 
+        email = '';
         username = '';
         password = '';
+        confirmPassword = '';
     };
 </script>
 
-<div class="login">
-    <form on:submit={handleSubmit}>
-        <div class="input-wrapper {usernameEmpty ? 'warning' : ''}">
-            <input type="text" placeholder="Email / Username" bind:value={username}>
-            {#if usernameEmpty}
-                <p class="warning-text">Username cannot be empty</p>
-            {/if}
-        </div>
-        <div class="input-wrapper {passwordEmpty ? 'warning' : ''}">
-            <input type="password" placeholder="Password" bind:value={password}>
-            {#if passwordEmpty}
-                <p class="warning-text">Password cannot be empty</p>
-            {/if}
-        </div>
-        <button type="submit">Login</button>
+<div class="login" on:submit={handleSubmit}>
+    <form action="">
+        <input type="text" placeholder="Email" bind:value={email}>
+        <input type="text" placeholder="Username" bind:value={username}>
+        <input type="password" placeholder="Password" bind:value={password}>
+        <input type="password" placeholder="Confirm Password" bind:value={confirmPassword}>
+        <button type="submit">Register</button>
         <br />
-        <a href="/forgot-password">Forgot password?</a>
-        <br />
-        <a href="/register" class="register">Create an Account</a>
+        <a href="/" class="register">Already have an account?</a>
     </form>
 </div>
 
@@ -87,7 +77,8 @@
         box-shadow: 1rem 1rem var(--secondary);
     }
 
-    .login > form > .input-wrapper > * {
+    .login > form > * {
+        margin: 0.5rem 0;
         padding: 0.5rem;
     }
 
@@ -97,7 +88,6 @@
         border: none;
         padding: 1rem;
         cursor: pointer;
-        margin: 0.5rem 0;
     }
 
     a.register, button {
@@ -108,7 +98,7 @@
     }
 
     a.register:hover, button:hover, button:focus {
-        background-color: var(--accent);
+        color: var(--accent);
     }
 
     a {
@@ -120,22 +110,5 @@
         color: var(--secondary);
         text-decoration: none;
         cursor: pointer;
-    }
-
-    .input-wrapper {
-        position: relative;
-        margin: 0.5rem 0;
-    }
-    .warning {
-        border: 1px solid red;
-    }
-
-    .warning-text {
-        color: red;
-        font-size: 0.5rem;
-        position: absolute;
-        bottom: -16px;
-        left: 2px;
-        pointer-events: none;
     }
 </style>

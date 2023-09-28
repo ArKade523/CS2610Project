@@ -5,7 +5,9 @@
 
 <header>
 	<nav class="desktop-nav" class:hidden={showMenu}>
-		<a href='/'>Home</a>
+		<div class="nav-item">
+			<a href='/'>Home</a>
+		</div>
 	</nav>
 	<button class="hamburger-button" aria-label="Hamburger Menu" on:click={() => showMenu = !showMenu}>
 		<i class={`fas ${showMenu ? 'fa-times rotate-x' : 'fa-bars rotate-bars'}`}></i>
@@ -27,6 +29,7 @@
 		height: 4rem;
 		z-index: 2;
 		font-family: var(--font-mono);
+		overflow: hidden;
 
         background-color: var(--secondary);
 	}
@@ -39,15 +42,24 @@
 	}
 
 	nav > * {
+		display: flex;
+		justify-content: center;
+		height: 100%;
+	}
+
+	nav > * > * {
 		color: #fff;
 		text-decoration: none;
 		font-size: 1.5rem;
 		font-weight: 700;
 		padding: 0 1rem;
+		height: 100%;
+		justify-content: center;
+		padding-top: 1.1rem;
 	}
 	
-	nav > a:hover {
-		color: var(--secondary);
+	nav > .nav-item:hover {
+		background-color: var(--accent);
 		text-decoration: none;
 		cursor: pointer;
 	}
