@@ -1,8 +1,15 @@
 import axios from 'axios';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 
-// Start the server
-exec('npx ts-node ./src/index.ts'); 
+const server = spawn('npx', ['ts-node', './src/index.ts']);
+
+server.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+server.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
 
 // Give the server some time to start
 setTimeout(async () => {
