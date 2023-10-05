@@ -8,7 +8,7 @@ exec('npx ts-node ./src/index.ts');
 setTimeout(async () => {
   try {
     // Check if the server is running
-    const response = await axios.get('http://localhost:3000/health-check');
+    const response = await axios.get('http://127.0.0.1:3000/health-check');
 
     if (response.status === 200) {
       console.log('Server is running. CI check passed.');
