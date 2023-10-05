@@ -19,6 +19,7 @@ setTimeout(async () => {
     }
   } catch (error) {
     console.log('Could not make a request to the server. It is likely not running.');
+    console.error(error);
     process.exit(1);  // Exit with failure code
   }
 }, 5000);  // Wait for 5 seconds
