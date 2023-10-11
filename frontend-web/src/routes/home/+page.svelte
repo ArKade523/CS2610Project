@@ -1,17 +1,19 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     // Check if the web token is valid before continuing to render the page
-    async function load({ fetch }: { fetch: WindowOrWorkerGlobalScope['fetch'] }) {
+    async function pageRedirect({ fetch }: { fetch: WindowOrWorkerGlobalScope['fetch'] }) {
         const res = await fetch('/api/verify-token');
-      
-        if (!res.ok) {
-            return { redirect: '/login' }; // Redirect to login page if token is invalid
-        } 
+        const data = await res.json();
+
+        if (!data.valid) {
+            goto('/login');
+        }
     }
 
     onMount(() => {
-        load({ fetch: window.fetch });
+        pageRedirect({ fetch: window.fetch });
     });
 </script>
 <section>
