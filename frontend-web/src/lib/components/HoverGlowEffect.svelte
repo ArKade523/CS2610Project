@@ -55,6 +55,6 @@
         background: radial-gradient(circle, rgba(255,255,255,1) 10%, rgba(255,255,255,0) 70%);
         transform: translate(-50%, -60%);
 
-        z-index: 0;
+        z-index: -1;
     }
 </style>

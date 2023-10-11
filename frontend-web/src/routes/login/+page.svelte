@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ForgotPassword from "$lib/components/ForgotPassword.svelte";
+    import Login from "$lib/components/Login.svelte";
 
 
 </script>
@@ -8,19 +8,19 @@
     <div class="grid-two-items">
         <div class="grid-item">
             <div>
-                <h1>Forgot your Password?</h1>
-                <h2>Send a reset link to you email</h2>
+                <h1>Login</h1>
+                <h2>Enter your login credentials</h2>
 
             </div>
 
         </div>
         <div class="grid-item">
-            <ForgotPassword />
+            <Login />
         </div>
     </div>
 
 </section>
 
 <style>
-
+    
 </style>

@@ -119,14 +119,14 @@ app.get('/api/verify-token', verifyToken, (req: Request, res: Response) => {
   const token = req.cookies.token; // Assuming you're using cookie-parser
 
   if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ message: 'No token provided', valid: false });
   }
 
   try {
     const decoded = jwt.verify(token, jwtSecret);
-    res.status(200).json({ message: 'Token is valid' });
+    res.status(200).json({ message: 'Token is valid', valid: true });
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+    res.status(401).json({ message: 'Invalid token', valid: false });
   }
 });
 
