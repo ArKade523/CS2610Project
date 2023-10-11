@@ -1,9 +1,14 @@
-import express, { Express, Request, Response, Application } from 'express';
+import express, { Express, Request, Response, Application, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import path from 'path';
 import bodyParser from 'body-parser';
 import { MySQLDatabase } from './mysqlDatabase';
 import credentials from './credentials.json';
+import verifyToken from './verifyToken';
+import cookieParser from 'cookie-parser';
+
+const USING_HTTPS = false;
 
 const localConfig = {
     host: credentials.dbHost,
@@ -22,6 +27,15 @@ app.use(express.static(path.resolve('../frontend-web/build')));
 
 // Set up the body parser middleware to parse JSON packets
 app.use(bodyParser.json());
+
+// Set up the cookie parser middleware
+app.use(cookieParser());
+
+// Serve SvelteKit frontend
+app.use(express.static(path.resolve('../frontend-web/build')));
+
+// Set up the JWT middleware
+const jwtSecret = credentials.jwtSecret;
 
 app.post('/api/register', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -66,9 +80,26 @@ app.post('/api/login', async (req: Request, res: Response) => {
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid login credentials' });
     }
+    
+    // Create a JWT token
+    let token;
+    try {
+      token = jwt.sign({ userId: user.id }, jwtSecret, {
+        expiresIn: '1h' // expires in 1 hour
+      });
+    } catch (error) {
+      console.error('Error during JWT signing:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+    // Set HttpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: USING_HTTPS,
+      maxAge: 3600000 // 1 hour in milliseconds
+    });
 
     // At this point, the user is authenticated.
-    // TODO: Generate a session or a JWT token and send it back to the client.
     res.json({ message: 'Login successful', userId: user.id });
 
   } catch (error) {
@@ -83,12 +114,33 @@ app.post('/api/forgot-password', (req: Request, res: Response) => {
   res.json({ message: 'Forgot-password endpoint hit', data: req.body });
 });
 
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.resolve('../frontend-web/build/index.html'))  
+// Api to verify the JWT token
+app.get('/api/verify-token', verifyToken, (req: Request, res: Response) => {
+  const token = req.cookies.token; // Assuming you're using cookie-parser
+
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret);
+    res.status(200).json({ message: 'Token is valid' });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
 });
 
 app.get('/health-check', (req: Request, res: Response) => {
   res.send('OK');
+});
+
+// Catch-all route to delegate to SvelteKit
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  // If no API route matched, delegate to SvelteKit
+  if (!req.route) {
+    return next();
+  }
+  res.sendFile(path.resolve('../frontend-web/build/index.html'));
 });
 
 app.listen(port, () => {

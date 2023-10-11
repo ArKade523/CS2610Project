@@ -1,15 +1,15 @@
 <script lang="ts">
-    // TODO: Send a POST request to the backend to login
-    // TODO: Redirect to the homepage if the login is successful
     // TODO: Display an error message if the login is unsuccessful
-    // TODO: Create Forgot Password page
-    // TODO: Create Register page
+    import { goto } from '$app/navigation';
+    import { error } from '@sveltejs/kit';
 
     let username = '';
     let password = '';
 
     let usernameEmpty = false;
     let passwordEmpty = false;
+
+    let errorMessage = '';
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
@@ -35,32 +35,40 @@
         });
 
         if (response.ok) {
-            // TODO: Redirect to homepage
             console.log('Login successful');
+            goto('/home');
         } else {
             // TODO: display an error message
             console.log('Login unsuccessful');
+            errorMessage = 'Login unsuccessful';
         }
 
         username = '';
         password = '';
     };
+
+    $: {
+        if (usernameEmpty || passwordEmpty) {
+            errorMessage = 'Username or password cannot be empty';
+        } else {
+            errorMessage = '';
+        }
+    }
+
+    const clearErrorMessage = () => {
+        errorMessage = '';
+    }
 </script>
 
 <div class="login">
     <form on:submit={handleSubmit}>
         <div class="input-wrapper {usernameEmpty ? 'warning' : ''}">
-            <input type="text" placeholder="Email / Username" bind:value={username}>
-            {#if usernameEmpty}
-                <p class="warning-text">Username cannot be empty</p>
-            {/if}
+            <input type="text" placeholder="Email / Username" bind:value={username} on:input={clearErrorMessage}>
         </div>
         <div class="input-wrapper {passwordEmpty ? 'warning' : ''}">
-            <input type="password" placeholder="Password" bind:value={password}>
-            {#if passwordEmpty}
-                <p class="warning-text">Password cannot be empty</p>
-            {/if}
+            <input type="password" placeholder="Password" bind:value={password} on:input={clearErrorMessage}>
         </div>
+        <p class="warning-text">{errorMessage}</p>
         <button type="submit">Login</button>
         <br />
         <a href="/forgot-password">Forgot password?</a>
@@ -132,10 +140,7 @@
 
     .warning-text {
         color: red;
-        font-size: 0.5rem;
-        position: absolute;
-        bottom: -16px;
-        left: 2px;
         pointer-events: none;
+        text-align: center;
     }
 </style>

@@ -15,10 +15,7 @@ export class MySQLDatabase implements IDatabase {
         });
     }
 
-    async connect(): Promise<void> {
-        // With connection pools, you don't typically "connect" or "disconnect".
-        // The pool handles this for you, giving you a connection when needed.
-        // However, if you want to ensure there's a valid connection for some reason:
+    async check_connection(): Promise<void> {
         const connection = await this.pool.getConnection();
         connection.release();
     }
@@ -32,7 +29,7 @@ export class MySQLDatabase implements IDatabase {
     }
 
     async createUser(username: string, email: string, password: string): Promise<void> {
-        if (!this.connect()) {
+        if (!this.check_connection()) {
             throw new Error("Not connected to the database");
         }
 
@@ -45,7 +42,7 @@ export class MySQLDatabase implements IDatabase {
     }
 
     async findUserByUsername(username: string): Promise<any | null> {
-        if (!this.connect()) {
+        if (!this.check_connection()) {
             throw new Error("Not connected to the database");
         }
 

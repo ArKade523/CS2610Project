@@ -7,5 +7,9 @@
                 "strict": true,
                 "esModuleInterop": true,
                 "resolveJsonModule": true,
-        }
+        },
+        "include": [
+                "src/**/*.ts",
+                "src/types/*.d.ts" // Include custom declaration files
+        ],
 }
