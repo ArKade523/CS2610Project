@@ -69,12 +69,12 @@
 		display: none;
 	}
 	
+	.hamburger-button {
+		display: none;
+	}
+
 	/* Mobile view */
 	@media only screen and (max-width: 768px) {
-		header {
-			background: #000;
-		}
-
 		.desktop-nav {
 			display: none;
 		}
@@ -84,10 +84,10 @@
 			background: none;
 			color: var(--color-text);
 			border: none;
-			left: 0;
+			left: 1rem;
 			top: 0;
 			position: absolute;
-			margin: 1rem;
+			margin: 0rem;
 			font-size: 2rem;
 			cursor: pointer;
 		}
