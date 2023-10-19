@@ -66,6 +66,4 @@ I'm using Express for routing on the backend. Check out backend/index.ts to add 
 ### SvelteKit
 The frontend is built with SvelteKit. Check out src/routes to add or modify frontend pages.
 
-This is my personal project and is not open for contributions. If you have questions or want to learn more, feel free to reach out.
-
-[My email](mailto:kade@angell.fyi)
+This is my personal project and is not open for contributions. If you have questions or want to learn more, feel free to [reach out](mailto:kade@angell.fyi).
