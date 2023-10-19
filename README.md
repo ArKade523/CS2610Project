@@ -1,13 +1,14 @@
-# 🎨 Unnamed Social Media Art Project by Kade Angell
+# 🎨 Daydoodle by Kade Angell
 
 ## Description
 
-Welcome to my yet-to-be-named social media art project! This platform prompts users with colors and a theme, inviting them to draw something creative. Once the masterpiece is ready, users can upload it for the world to see. The project uses an Express backend and a SvelteKit frontend, all written in TypeScript.
+Welcome to Daydoodle, my social media art project! This platform prompts users with colors and a theme, inviting them to draw something creative. Once the masterpiece is ready, users can upload it for the world to see. The project uses an Express backend and a SvelteKit frontend, all written in TypeScript.
 
 ## 🛠 Technologies
 
 - Backend: Express with TypeScript
 - Frontend: SvelteKit with TypeScript
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -60,9 +61,11 @@ The tsconfig.json in the backend directory configures TypeScript for Node.js and
 The svelte.config.js and tsconfig.json in the frontend-web directory set up TypeScript for SvelteKit.
 
 ### Express
-I'm using Express for routing on the backend. Check out the routes folder to add or modify API endpoints.
+I'm using Express for routing on the backend. Check out backend/index.ts to add or modify API endpoints.
 
 ### SvelteKit
 The frontend is built with SvelteKit. Check out src/routes to add or modify frontend pages.
 
 This is my personal project and is not open for contributions. If you have questions or want to learn more, feel free to reach out.
+
+[My email](mailto:kade@angell.fyi)
