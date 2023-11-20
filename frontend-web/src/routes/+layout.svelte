@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-	import Header from './Header.svelte';
+	import Header from '$lib/components/Header.svelte';
     import './styles.css'
     import HoverGlowEffect from '$lib/components/HoverGlowEffect.svelte';
 	import Daydoodle from '$lib/images/Daydoodle.png';

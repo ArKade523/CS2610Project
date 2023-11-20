@@ -4,9 +4,12 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 import bodyParser from 'body-parser';
 import { MySQLDatabase } from './mysqlDatabase';
+import { UserData } from './types/userTypes';
 import credentials from './credentials.json';
 import verifyToken from './verifyToken';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
+import generatePhrase from './generatePhrase';
 
 const USING_HTTPS = false;
 
@@ -58,7 +61,7 @@ app.post('/api/register', async (req: Request, res: Response) => {
   }
 });
 
-// Stub for /api/login
+// /api/login endpoint
 app.post('/api/login', async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
@@ -84,9 +87,10 @@ app.post('/api/login', async (req: Request, res: Response) => {
     // Create a JWT token
     let token;
     try {
-      token = jwt.sign({ userId: user.id }, jwtSecret, {
+      token = jwt.sign({ userData: user }, jwtSecret, {
         expiresIn: '1h' // expires in 1 hour
       });
+
     } catch (error) {
       console.error('Error during JWT signing:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
@@ -100,12 +104,61 @@ app.post('/api/login', async (req: Request, res: Response) => {
     });
 
     // At this point, the user is authenticated.
-    res.json({ message: 'Login successful', userId: user.id });
+    res.json({ message: 'Login successful', user: {username: username, name: username} });
 
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
+});
+
+// /api/userData endpoint
+app.get('/api/userData', (req: Request, res: Response) => {
+  const token = req.cookies.token; // Get the token from the cookie
+  if (!token) return res.status(401).json({ message: 'Not authenticated' });
+
+  try {
+    const { userData } = jwt.verify(token, jwtSecret) as { userData: UserData };
+    res.json(userData);
+  } catch (error) {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
+
+// /api/logout endpoint stub
+app.post('/api/logout', (req: Request, res: Response) => {
+  res.clearCookie('token').json({ message: 'Logged out successfully' });
+});
+
+// /api/prompt endpoint
+app.get('/api/prompt', (req: Request, res: Response) => {
+  // Define the path to your file
+  const filePath: string = path.join(__dirname, '../phrase.json');
+
+  // Check if the file exists and read it
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        // File doesn't exist, generate a new phrase
+        generatePhrase(filePath, res);
+      } else {
+        // Some other error
+        return res.status(500).send('Error reading the file.');
+      }
+    } else {
+      // File exists, check the timestamp
+      const fileContent = JSON.parse(data.toString());
+      const oneHourAgo = new Date(Date.now() - 3600000);
+
+      if (new Date(fileContent.timestamp) < oneHourAgo) {
+        // The stored phrase is more than one hour old, generate a new one
+        generatePhrase(filePath, res);
+      } else {
+        // The stored phrase is still valid, return it
+        res.json({ phrase: fileContent.phrase });
+      }
+    }
+  });
 });
 
 // Stub for /api/forgot-password

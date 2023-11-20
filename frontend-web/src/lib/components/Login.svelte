@@ -1,6 +1,9 @@
 <script lang="ts">
     // TODO: Display an error message if the login is unsuccessful
     import { goto } from '$app/navigation';
+    import userStore from '$lib/stores/userStore';
+    import getUserData from '$lib/utils/getUserData';
+    import { get } from 'svelte/store';
     import { error } from '@sveltejs/kit';
 
     let username = '';
@@ -35,7 +38,10 @@
         });
 
         if (response.ok) {
-            console.log('Login successful');
+            // Receive userData from the server and put it in the user store
+            await getUserData().then(() => {
+                console.log(get(userStore));
+            });
             goto('/home');
         } else {
             // TODO: display an error message

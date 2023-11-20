@@ -1,7 +1,12 @@
 <script lang="ts">
     import Login from "$lib/components/Login.svelte";
     import DaydoodleTransparentLight from "$lib/images/Daydoodle-Transparent-Light.png";
+    import headerShowAllItemsStore from "$lib/stores/headerShowAllItemsStore";
+    import { onMount } from "svelte";
 
+    onMount(() => {
+        headerShowAllItemsStore.set(false);
+    });
 </script>
 
 <section>

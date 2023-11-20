@@ -5,7 +5,7 @@ import credentials from './credentials.json';
 const jwtSecret = credentials.jwtSecret;
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token; // Assuming you're using a middleware like cookie-parser
+    const token = req.cookies.token; // Using middleware cookie-parser
   
     if (!token) {
         return res.status(403).json({ message: 'Not authorized' });

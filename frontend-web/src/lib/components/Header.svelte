@@ -1,13 +1,61 @@
 <script lang="ts">
-	import '@fortawesome/fontawesome-free/css/all.css';
-	let showMenu: boolean = false;
+	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store'; 
+	import userStore from '$lib/stores/userStore';
+	import headerShowAllItemsStore from '$lib/stores/headerShowAllItemsStore';
+  
+	let showMenu = false;
+	let unsubscribe = () => {};
+  
+	onMount(() => {
+		unsubscribe = userStore.subscribe(user => {
+			headerShowAllItemsStore.set(!!user);
+		});
+	
+		if (!import.meta.env.SSR) {
+			showItemsIfTokenIsValid();
+		}
+	
+	});
+	
+	async function showItemsIfTokenIsValid() {
+		try {
+			const res = await fetch('/api/verify-token');
+			const data = await res.json();
+			headerShowAllItemsStore.set(data.valid);
+		} catch (err) {
+			console.error(err);
+			headerShowAllItemsStore.set(false);
+		}
+	}
+	
+	onDestroy(() => {
+		unsubscribe();
+	});
+
+
 </script>
 
 <header>
 	<nav class="desktop-nav" class:hidden={showMenu}>
-		<div class="nav-item">
-			<a href='/'>Home</a>
-		</div>
+		{#if !$headerShowAllItemsStore}
+			<div class="nav-item">
+				<a href='/login'>Login</a>
+			</div>
+			<div class="nav-item">
+				<a href='/register'>Register</a>
+			</div>
+		{:else if $headerShowAllItemsStore}
+			<div class="nav-item">
+				<a href='/home'>Home</a>
+			</div>
+			<div class="nav-item">
+				<a href='/profile'>Profile</a>
+			</div>
+			<div class="nav-item">
+				<a href='/logout'>Logout</a>
+			</div>
+		{/if}
 	</nav>
 	<button class="hamburger-button" aria-label="Hamburger Menu" on:click={() => showMenu = !showMenu}>
 		<i class={`fas ${showMenu ? 'fa-times rotate-x' : 'fa-bars rotate-bars'}`}></i>
@@ -59,7 +107,7 @@
 		padding-top: 1.1rem;
 	}
 	
-	nav > .nav-item:hover {
+	.nav-item:hover {
 		background-color: var(--accent);
 		text-decoration: none;
 		cursor: pointer;

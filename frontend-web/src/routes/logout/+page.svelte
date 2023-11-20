@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Register from "$lib/components/Register.svelte";
+    import Logout from "$lib/components/Logout.svelte";
     import DaydoodleTransparentLight from "$lib/images/Daydoodle-Transparent-Light.png";
     import headerShowAllItemsStore from "$lib/stores/headerShowAllItemsStore";
     import { onMount } from "svelte";
 
     onMount(() => {
-        headerShowAllItemsStore.set(false);
+        headerShowAllItemsStore.set(true);
     });
 </script>
 
@@ -14,15 +14,15 @@
         <div class="grid-item">
             <div>
                 <div>
-                    <h1>Register</h1>
-                    <h2>Create an account!</h2>
+                    <h1>Logout</h1>
+
                 </div>
                 <img src={DaydoodleTransparentLight} alt="Daydoodle Logo" />
             </div>
 
         </div>
         <div class="grid-item">
-            <Register />
+            <Logout />
         </div>
     </div>
 
